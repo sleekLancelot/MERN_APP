@@ -27,10 +27,10 @@ router.post('/', [
         const { name, email, password } = req.body;
 
         try {
-            let user = User.findOne({ email });
+            let user = await User.findOne({ email });
             if (user) {
                 console.log(user);
-                res.status(400).json({ msg: 'Oiii, user already exits' });
+                return res.status(400).json({ msg: 'Oiii, user already exits' });
             };
             user = new User({
                 name,
