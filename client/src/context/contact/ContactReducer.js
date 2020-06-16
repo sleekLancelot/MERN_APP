@@ -11,19 +11,17 @@ import {
     CLEAR_CONTACTS
 } from '../types';
 
-const ContactReducer = (action, state) => {
+export default (state, action) => {
     switch (action.type) {
         case ADD_CONTACT:
             return {
                 ...state,
-                contacts: [action.payload, ...state.contacts]
+                contacts: [...state.contacts, action.payload]
             };
 
         default:
-            // throw new Error(`unhandled action:${action.type, action.payload}`);
-            // throw new Error(`Unsupported type of: ${action.type}`)
-            return state
+            throw new Error(`unhandled action:${action.type, action.payload}`);
+        // throw new Error(`Unsupported type of: ${action.type}`)
+        // return state
     }
 }
-
-export default ContactReducer;

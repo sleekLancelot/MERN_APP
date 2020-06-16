@@ -6,7 +6,6 @@ const Contact = () => {
     const contactContext = useContext(ContactContext);
 
     const { contacts } = contactContext;
-    console.log(contacts)
 
     return (
         <div className="cardFlex">
