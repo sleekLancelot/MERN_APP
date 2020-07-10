@@ -11,7 +11,9 @@ module.exports = (req, res, next) => {
     }
 
     try {
+        //verify the token and put the it in the request
         const decode = jwt.verify(token, config.get('jwtSecret'));
+        //the decoded token has a payload of users,put it in the request
         req.user = decode.user;
         next();
     } catch (err) {

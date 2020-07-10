@@ -8,7 +8,7 @@ const User = require('../models/User');
 const auth = require('../middleware/auth');
 
 //route     GET api/auth
-//desc      get log in user
+//desc      get this user
 //access    private
 router.get('/', auth, async (req, res) => {
     try {
@@ -41,15 +41,16 @@ router.post('/', [
             // Check the db collection for a user with prop 'email' with value 'req.email'
             let user = await User.findOne({ email });
             if (!user) {
-                return res.status(400).json({ msg: 'Invalid email' })
+                return res.status(400).json({ msg: 'Invalid email or password' })
             }
 
             const isMatch = await bcrypt.compare(password, user.password);
 
             if (!isMatch) {
-                return res.status(400).json({ msg: 'Invalid password' });
+                return res.status(400).json({ msg: 'Invalid email or password' });
             }
-
+		
+		//pass the user id as the token payload
             const payload = {
                 user: {
                     id: user.id
