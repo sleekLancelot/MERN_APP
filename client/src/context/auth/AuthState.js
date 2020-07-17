@@ -36,7 +36,7 @@ export const loadUser = async dispatch => {
   }
 };
 
-//make the client know the media-type of the returned value is a json
+//make the client know the media-type of the returned value(response) is a json
 const config = {
   header: {
     'Content-Type': 'application/json',
@@ -47,13 +47,13 @@ const config = {
 export const login = async (dispatch, formData) => {
   try {
     const res = await axios.post('/api/auth', formData, config)
-    console.log(res.data);
+
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
     })
 
-    // on login,return User details
+    // on login,return User details,and dispatch it to the reducer
     loadUser(dispatch)
   } catch (err) {
     dispatch({
@@ -105,7 +105,7 @@ const AuthState = props => {
   setAuthToken(state.token);
 
   //load user on start or on refresh
-  if (!state.loaded && state.token) loadUser(dispatch);
+  if (state.token && !state.loaded) loadUser(dispatch);
 
   //watch the token,reset if it changes
   useEffect(() => {

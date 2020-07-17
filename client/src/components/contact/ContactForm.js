@@ -1,12 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ContactContext from '../../context/contact/ContactContext'
+import AlertContext from '../../context/alert/AlertContext'
 
 const ContactForm = () => {
     const contactContext = useContext(ContactContext);
+    const { addContact, current, clearCurrent, updateContact, error, clearError } = contactContext;
 
-    const { addContact, current, clearCurrent, updateContact } = contactContext;
+    const alertContext = useContext(AlertContext)
+    const { setAlert } = alertContext
 
     useEffect(() => {
+        if (error) {
+            setAlert(error, 'danger')
+            clearError()
+        }
+
         if (current) {
             setContact(current)
         }
@@ -18,7 +26,7 @@ const ContactForm = () => {
                 type: 'personal'
             })
         }
-    }, [contactContext, current]);
+    }, [contactContext, current, clearError, error, setAlert]);
 
     const [contact, setContact] = useState({
         name: '',
@@ -34,11 +42,14 @@ const ContactForm = () => {
 
     const onSubmit = e => {
         e.preventDefault();
+
         if (current) {
             updateContact(contact)
         } else {
             addContact(contact);
         }
+
+
         clearCurrent();
     }
 
@@ -55,6 +66,7 @@ const ContactForm = () => {
                 name='name'
                 value={name}
                 onChange={onChange}
+                required
             />
             <input
                 type='email'

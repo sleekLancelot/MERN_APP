@@ -8,31 +8,46 @@ import {
     FILTER_CONTACTS,
     CLEAR_FILTER,
     CONTACT_ERROR,
-    CLEAR_CONTACTS
+    CLEAR_CONTACTS,
+    CLEAR_ERRORS
 } from '../types';
 
 export default (state, action) => {
     switch (action.type) {
+        case GET_CONTACTS:
+            return {
+                ...state,
+                contacts: action.payload,
+                loaded: true
+            }
         case ADD_CONTACT:
             return {
                 ...state,
-                contacts: [...state.contacts, action.payload]
+                contacts: [action.payload, ...state.contacts],
+                loaded: true
             };
+        case UPDATE_CONTACT:
+            return {
+                ...state,
+                contacts: state.contacts.map(contact => contact._id === action.payload._id ? action.payload : contact),
+                filtered: state.filtered && state.filtered.map(fContact => fContact._id === action.payload._id ? action.payload : fContact),
+                loaded: true
+            }
         case DELETE_CONTACT:
             return {
                 ...state,
-                contacts: state.contacts.filter((contact) => contact.id !== action.payload),
+                contacts: state.contacts.filter((contact) => contact._id !== action.payload[1]),
                 current: (() => {
                     if (state.current) {
-                        return state.current.id === action.payload ? null : state.current
+                        return state.current._id === action.payload[1] ? null : state.current
                     }
                 })(),
                 filtered: (() => {
                     if (state.filtered) {
-                        return state.filtered.filter(fContact => fContact.id !== action.payload)
+                        return state.filtered.filter(fContact => fContact._id !== action.payload[1])
                     }
-                })()
-                //  state.current !== null ? state.current.id === action.payload ? null : state.current
+                })(),
+                loaded: true
             }
         case SET_CURRENT:
             return {
@@ -44,11 +59,10 @@ export default (state, action) => {
                 ...state,
                 current: null
             }
-        case UPDATE_CONTACT:
+        case CONTACT_ERROR:
             return {
                 ...state,
-                contacts: state.contacts.map(contact => contact.id === action.payload.id ? action.payload : contact),
-                filtered: state.filtered && state.filtered.map(fContact => fContact.id === action.payload.id ? action.payload : fContact)
+                error: action.payload,
             }
         case FILTER_CONTACTS:
             return {
@@ -62,6 +76,19 @@ export default (state, action) => {
             return {
                 ...state,
                 filtered: null
+            }
+        case CLEAR_CONTACTS:
+            return {
+                ...state,
+                contacts: null,
+                error: null,
+                current: null,
+                filtered: null
+            }
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
             }
         default:
             throw new Error(`unhandled action:${action.type},${action.payload}`);

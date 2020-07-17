@@ -49,8 +49,8 @@ router.post('/', [
             if (!isMatch) {
                 return res.status(400).json({ msg: 'Invalid email or password' });
             }
-		
-		//pass the user id as the token payload
+
+            //pass the user id as the token payload
             const payload = {
                 user: {
                     id: user.id
@@ -69,7 +69,7 @@ router.post('/', [
                 });
 
         } catch (err) {
-            console.log(err.message);
+            // console.log(err.message);
             return res.status(500).send('Server error');
         }
     });

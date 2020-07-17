@@ -2,10 +2,9 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { useAuth } from '../../context/auth/AuthState'
 
-const privateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
     const [authState] = useAuth();
     const { isAuthenticated } = authState;
-    console.log(Component);
 
     return (
         <Route
@@ -18,4 +17,4 @@ const privateRoute = ({ component: Component, ...rest }) => {
     )
 }
 
-export default privateRoute;
+export default PrivateRoute;

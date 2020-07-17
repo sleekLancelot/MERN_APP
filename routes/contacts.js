@@ -14,7 +14,7 @@ router.get('/', auth, async (req, res) => {
         const contacts = await Contact.find({ user: req.user.id }).sort('-date');
         res.json(contacts);
     } catch (err) {
-        console.log(err.message);
+        // console.log(err.message);
         res.status(500).send('Server Error');
     }
 })
@@ -72,11 +72,10 @@ router.put('/:id', auth, async (req, res) => {
         if (!contact) return res.status(400).json({ msg: 'This contact does not exist' });
 
         //And if it does,check if ths user is authorized
-
-        if (contact.user.toString() !== req.user.id) return res.status(401).json({ msg: 'Unauthorized Request' });
+        if (contact.user.toString() !== req.user.id) return res.status(401).json({ msg: 'Unauthorized Request,try login to gain access' });
 
         /*
-        // This would have been better as it would be redundant to query the model for the params id once again,but can't yet figure how to return the updated to view in postman if i go with this style.
+        // This would have been better as it would be redundant to query the model for the params id once again,but can't yet figure how to return the updated to the client if i go with this style.
 
          await contact.updateOne(
             { $set: ContactField },
@@ -92,7 +91,7 @@ router.put('/:id', auth, async (req, res) => {
 
         res.json(contact);
     } catch (err) {
-        console.log(err.message);
+        // console.log(err.message);
         res.status(500).send('Server Error');
     }
 });
@@ -109,14 +108,14 @@ router.delete('/:id', auth, async (req, res) => {
         if (!contact) return res.status(400).json({ msg: 'This contact does not exist' });
 
         //If it exist,check if this user is authorized
-        if (contact.user.toString() !== req.user.id) return res.status(401).json({ msg: 'Unauthorized Request' });
+        if (contact.user.toString() !== req.user.id) return res.status(401).json({ msg: 'Unauthorized Request,try login to gain access' });
 
         //then delete
         await Contact.findByIdAndRemove(req.params.id);
 
-        res.json({ msg: 'Contact Deleted' });
+        res.json({ msg: `${contact.name} Deleted` });
     } catch (err) {
-        console.log(err.message)
+        // console.log(err.message)
         res.status(500).send('Server Error');
     }
 });

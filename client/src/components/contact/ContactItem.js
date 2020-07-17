@@ -6,10 +6,10 @@ const ContactItem = ({ contact }) => {
     const contactContext = useContext(ContactContext);
     const { deleteContact, setCurrent } = contactContext;
 
-    const { id, name, phone, email, type } = contact;
+    const { _id, name, phone, email, type } = contact;
 
     const onDelete = () => {
-        deleteContact(id);
+        deleteContact(_id);
     }
 
     const onEdit = () => {
@@ -17,7 +17,7 @@ const ContactItem = ({ contact }) => {
     }
     return (
         <div className='card bg-light'>
-            <h3 className='text-primary text-left'>
+            <h3 className='text-dark text-left'>
                 {name}{' '}
                 <span
                     style={{ float: 'right' }}

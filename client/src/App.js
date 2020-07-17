@@ -9,7 +9,7 @@ import About from './components/pages/About'
 import Navbar from './components/layout/Navbar'
 import LorR from './components/pages/LorR';
 import Alert from './components/layout/Alert';
-import PrivateRoute from './components/routing/privateRoute';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 
 const App = () => {
@@ -22,7 +22,8 @@ const App = () => {
               <Navbar />
               <Alert />
               <Switch>
-                <PrivateRoute exact path='/' component={Home} />                <Route path='/about' component={About} />
+                <PrivateRoute exact path='/' component={Home} />
+                <Route path='/about' component={About} />
                 <Route path='/register' render={props => (
                   <LorR {...props} word={'register'} logger={false} regger={true} />
                 )} />

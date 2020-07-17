@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
+import Axios from 'axios';
 import ContactContext from './ContactContext';
 import ContactReducer from './ContactReducer';
-import { v4 as uuid } from 'uuid';
 import {
     GET_CONTACTS,
     ADD_CONTACT,
@@ -12,56 +12,95 @@ import {
     FILTER_CONTACTS,
     CLEAR_CONTACTS,
     CLEAR_FILTER,
-    CONTACT_ERROR
+    CONTACT_ERROR,
+    CLEAR_ERRORS
 } from '../types';
 
 const ContactState = (props) => {
 
     const initialState = {
-        contacts: [
-            {
-                id: 1,
-                name: 'Jill Johnson',
-                email: 'jill@gmail.com',
-                phone: '111-111-1111',
-                type: 'professional',
-            },
-            {
-                id: 2,
-                name: 'Sam Clinton',
-                email: 'sam@gmail.com',
-                phone: '222-111-1111',
-                type: 'personal',
-            },
-            {
-                id: 3,
-                name: 'Bill Joe',
-                email: 'bill@gmail.com',
-                phone: '333-111-1111',
-                type: 'personal',
-            }
-        ],
+        contacts: null,
         current: null,
-        filtered: null
+        filtered: null,
+        error: null,
+        loaded: false
     }
 
     const [state, dispatch] = useReducer(ContactReducer, initialState);
 
+    //make the client know the media-type of the returned value is a json
+    const config = {
+        header: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    //get contact
+    const getContact = async () => {
+        try {
+            const res = await Axios.get('/api/contacts')
+
+            dispatch({
+                type: GET_CONTACTS,
+                payload: res.data
+            })
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.data.msg
+            })
+        }
+    }
+
     //add contact
-    const addContact = (contact) => {
-        contact.id = uuid();
-        dispatch({
-            type: ADD_CONTACT,
-            payload: contact
-        });
+    const addContact = async contact => {
+        try {
+            const res = await Axios.post('/api/contacts', contact, config)
+
+            dispatch({
+                type: ADD_CONTACT,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.data.msg
+            });
+        }
     }
 
     //delete contact
-    const deleteContact = (id) => {
-        dispatch({
-            type: DELETE_CONTACT,
-            payload: id
-        });
+    const deleteContact = async id => {
+        try {
+            const res = await Axios.delete(`/api/contacts/${id}`)
+
+            dispatch({
+                type: DELETE_CONTACT,
+                payload: [res.data.msg, id]
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.data.msg
+            });
+        }
+    }
+
+    //update contact
+    const updateContact = async contact => {
+        try {
+            const res = await Axios.put(`/api/contacts/${contact._id}`, contact, config)
+
+            dispatch({
+                type: UPDATE_CONTACT,
+                payload: res.data
+            })
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.data.msg
+            })
+        }
     }
 
     //set current contact
@@ -79,14 +118,6 @@ const ContactState = (props) => {
         })
     }
 
-    //update contact
-    const updateContact = (contact) => {
-        dispatch({
-            type: UPDATE_CONTACT,
-            payload: contact
-        })
-    }
-
     //filter through contact
     const filterContact = (text) => {
         dispatch({
@@ -99,18 +130,36 @@ const ContactState = (props) => {
         dispatch({ type: CLEAR_FILTER })
     }
 
+    //an action to clear the contacts in the app state once a cake logouts out,so it doesn't go show on another cakes profile
+    const clearContact = () => dispatch({ type: CLEAR_CONTACTS })
+
+    //clear errors
+    const clearError = () => {
+        dispatch({ type: CLEAR_ERRORS })
+    }
+
+    //clear response
+    //     const clearResponse = () =>{
+    //         dispatch({type:CLEAR_RESPONSE})
+    // }
+
     return (
         <ContactContext.Provider value={{
             contacts: state.contacts,
             current: state.current,
             filtered: state.filtered,
+            error: state.error,
+            loaded: state.loaded,
             addContact,
             deleteContact,
             setCurrent,
             clearCurrent,
             updateContact,
             filterContact,
-            clearFilter
+            clearFilter,
+            getContact,
+            clearContact,
+            clearError
         }}>
             {props.children}
         </ContactContext.Provider>
