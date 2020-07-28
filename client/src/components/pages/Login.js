@@ -3,7 +3,7 @@ import AlertContext from '../../context/alert/AlertContext'
 import { useAuth, login, clearErrors } from '../../context/auth/AuthState';
 
 
-const Login = ({ showLog, logger, prop: { history } }) => {
+const Login = ({ showLog, props: { history } }) => {
     const [loginDetails, setLoginDetails] = useState({
         email: '',
         password: ''
@@ -15,7 +15,6 @@ const Login = ({ showLog, logger, prop: { history } }) => {
 
     const { isAuthenticated, error } = authState
 
-    // console.log(`logger: ${logger},showLog : ${showLog}`);
 
     const { email, password } = loginDetails;
 
@@ -46,7 +45,7 @@ const Login = ({ showLog, logger, prop: { history } }) => {
     }
 
     return (
-        <form style={{ left: showLog || logger ? '-300px' : '300px', visibility: showLog || logger ? 'visible' : 'hidden' }} id="loginBox" method="post">
+        <form style={{ left: showLog ? '-300px' : '300px', visibility: showLog ? 'visible' : 'hidden' }} id="loginBox" method="post">
             <input onChange={onChange} name='email' type="text" placeholder="E-mail" value={email} required />
             <input style={{ marginTop: '-50px' }} onChange={onChange} name='password' type="password" placeholder="Password" value={password} required />
 

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import AlertContext from '../../context/alert/AlertContext'
 import { useAuth, register, clearErrors } from '../../context/auth/AuthState';
 
-const Register = ({ regger, showReg, prop: { history } }) => {
+const Register = ({ showReg, props: { history } }) => {
     const alertContext = useContext(AlertContext);
     const { setAlert } = alertContext;
     const [authState, authDispatch] = useAuth();
@@ -17,9 +17,6 @@ const Register = ({ regger, showReg, prop: { history } }) => {
     })
 
     const { name, email, password, password2 } = RegisterUser
-
-    // console.log(`regger: ${regger},showReg : ${showReg}`);
-
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -50,7 +47,7 @@ const Register = ({ regger, showReg, prop: { history } }) => {
         }
     }
     return (
-        <form onSubmit={onSubmit} style={{ left: showReg || regger ? '90px' : '-650px', visibility: showReg || regger ? 'visible' : 'hidden' }} id="registerBox" method="post">
+        <form onSubmit={onSubmit} style={{ left: showReg ? '90px' : '-650px', visibility: showReg ? 'visible' : 'hidden' }} id="registerBox" method="post">
             <input onChange={onChange} name='name' type="text" placeholder="Full-name" value={name} required />
             <input onChange={onChange} name='email' type="email" placeholder="E-mail" value={email} required />
             <input onChange={onChange} name='password' type="password" placeholder="Password" value={password} required minLength='6' />

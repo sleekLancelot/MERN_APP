@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useAuth, logout } from '../../context/auth/AuthState';
 import ContactContext from '../../context/contact/ContactContext';
 
-const Navbar = ({ title, icon }) => {
+const Navbar = ({ title }) => {
     const contactContext = useContext(ContactContext);
     const { clearContact } = contactContext
 
@@ -35,10 +35,7 @@ const Navbar = ({ title, icon }) => {
     const guestLink = (
         <>
             <li>
-                <Link to='/register'>Register</Link>
-            </li>
-            <li>
-                <Link to='/login'>Login</Link>
+                <Link to='/login-or-register'>Login / Register</Link>
             </li>
             <li>
                 <Link to='/about'>About</Link>
@@ -60,13 +57,12 @@ const Navbar = ({ title, icon }) => {
 }
 
 Navbar.prototype = {
-    title: PropTypes.string.isRequired,
-    icon: PropTypes.string
+    title: PropTypes.string.isRequired
 }
 
 Navbar.defaultProps = {
     title: 'Contact Keeper',
-    icon: 'fas fa-id-card-alt'
+    // icon: 'fas fa-id-card-alt'
 }
 
 export default Navbar;

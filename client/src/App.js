@@ -24,12 +24,13 @@ const App = () => {
               <Switch>
                 <PrivateRoute exact path='/' component={Home} />
                 <Route path='/about' component={About} />
-                <Route path='/register' render={props => (
+                <Route path='/login-or-register' component={LorR} />
+                {/* <Route path='/register' render={props => (
                   <LorR {...props} word={'register'} logger={false} regger={true} />
                 )} />
                 <Route path='/login' render={props => (
                   <LorR {...props} word={'login'} logger={true} regger={false} />
-                )} />
+                )} /> */}
               </Switch>
             </Fragment>
           </Router>
