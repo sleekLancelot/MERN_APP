@@ -2,10 +2,10 @@
 deployed to heroku https://powerful-brushlands-51369.herokuapp.com/
 
 ## Use
-AngularJS  
+ReactJS  
 Node  
 Express  
-d3.js Mongoose
+Mongo DB
 
 ## Usage
 install dependencies
