@@ -4,7 +4,8 @@ deployed to heroku https://powerful-brushlands-51369.herokuapp.com/
 ## Use
 AngularJS  
 Node
-Express
+
+Express  
 d3.js Mongoose
 
 ## Usage
