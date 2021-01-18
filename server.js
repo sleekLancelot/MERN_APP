@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'))
 
     // load this once the home page is hit
-    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.hmtl')));
+    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')));
 }
 
 app.listen(port, () => console.log(`we live on ${port}`));
